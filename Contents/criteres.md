@@ -3,19 +3,20 @@
 La table peut aussi accepter en entrées un ensemble de critères, ceux-ci sont
 appliqués à la collection associées à la table (ou le searchDoc, le cas échéant)
 et seuls les éléments satisfaisant à ces critères sont présentés dans la table
-et apparaissent dans les décomptes.
+et apparaissent dans les décomptes. <span class="flag review">Je comprend pas pourquoi SearchDoc est évoqué ici - on en parle nulle part ailleurs</span>
 
 Les critères se présentent sous la forme d'un array JavaScript dont chaque ligne
 est un objet avec le formalisme suivant :
 
 id
 :   attribut ou propriété sur lequel la collection est filtrée.  
-    Seules les propriété *state* et *title* sont utilisables, les attributs de type *time* et *color* ne sont pas pris en compte.  
+    Seules les propriétés *state* et *title* sont utilisables, 
+    les attributs de type *time* et *color* ne sont pas pris en compte.  
     *type* : chaîne de caractères
 
 type
 :   type de l'attribut/propriété en cours.
-    La propriété title doit avoir un type *text*  
+    La propriété *title* doit avoir un type *text*  
     *type* : chaîne de caractères
 
 multiplicity
@@ -38,14 +39,14 @@ operator
     :   applicable à tous les types d'attributs/propriété indique que le critère ne sera pas pris en compte,
     
     dc:empty
-    :   applicable à tous les types d'attributs/propriété indique que seuls les élements vide seront retenu.  
+    :   applicable à tous les types d'attributs/propriété indique que seuls les éléments vides seront retenu.  
         SQL suivant la multiplicité :
         
         *   simple : `%1$s is NULL`,
         *   multiple : `replace(%1$s, '<BR\>', E'\\n') ~ E'^\\\\n+$' or %1$s is NULL'`
     
     dc:not empty 
-    :   applicable à tous les types d'attributs/propriété indique que seuls les élements vide seront retenus.  
+    :   applicable à tous les types d'attributs/propriété indique que seuls les éléments vides seront retenus.  
         SQL suivant la multiplicité :
         
         *   simple* : %1$s is not NULL,

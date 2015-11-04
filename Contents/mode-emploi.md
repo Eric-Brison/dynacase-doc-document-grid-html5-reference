@@ -30,12 +30,12 @@ doivent avoir l'ACL : *BASIC* de l'application *DOCUMENT_GRID_HTML5*.
 
 ## Initialisation {#document-grid-ref:be129832-025e-4939-9bb2-09c5b4271077}
 
-Idéalement l'initialisation du plugin doit avoir lieu sur l'évènement *ready* de
+Idéalement l'initialisation du plugin doit avoir lieu sur l'événement *ready* de
 la page en cours pour permettre à la DOM et aux dépendances d'être chargées au
 préalable.
 
 L'initialisation de la documentGrid se fait sur une balise `<table>`, celle-ci
-doit être pré-existante à l'initialisation. On doit ensuite la sélectionner à
+doit être préexistante à l'initialisation. On doit ensuite la sélectionner à
 l'aide de jQuery et l'initialiser.
 
 
@@ -84,7 +84,12 @@ permettant d'ouvrir le document :
     <script type="text/javascript" src="DOCUMENT_GRID_HTML5/Layout/kitchen_sink.js?ws=[WS]"></script>
     </html>
 
-**Attention** : il faut mettre la table dans un div avec la classe container ou container-fluid
+
+<span class="flag review">Dans l'exemple, on voit apparaître des [WS] - Enlever ou expliquer
+à quoi ça sert. Enlever aussi le require en commentaire</span>
+
+**Attention** : il faut mettre la table dans un élément `div` avec la classe
+[`container`][bootstrap-container] ou  [`container-fluid`][bootstrap-container].
 
 ### Options de configuration {#document-grid-ref:405a40cd-9f17-42c8-b08e-ce79f06c13f0}
 
@@ -96,7 +101,7 @@ Les éléments en gras sont obligatoires.
 
 **columnsDef**
 :   configuration des colonnes (voir le détail dans le [paragraphe dédié][columnsDef]),  
-    *type* : objet javascript 
+    *type* : objet javascript ;
 
 filterable
 :   indique si grille proposera ou pas des filtres  
@@ -109,42 +114,45 @@ sortable
     *valeur par défaut* : `true` ;
 
 dataTableOptions 
-:   objet de configuration de la dataTable associée à la documentGrid,  
-    **Note** : Les options passées par cette entrée ne sont supportées via le contrat de support,
+:   objet de configuration de la [dataTable][jquery-datatables] associée à la documentGrid,  
+    **Note** : Les options passées par cette entrée ne sont pas supportées via le contrat de support,<span class="flag review">Bizarre de retrouver des contraintes "commerciale" ici, non ?</span>
     il appartient au développeur de tester le comportement et de faire ci-besoin 
     les ajustements nécessaires.  
     *type* : objet javascript  ;
 
 withOverlay
-:   indique si le système d'overlay doit être chargé avec la grille, ce système permet d'ouvrir les liens générés par la grille dans une fenêtre modale.  
+:   indique si le système d'overlay doit être chargé avec la grille, ce système 
+    permet d'ouvrir les liens générés par la grille dans une fenêtre modale.  
     *type* :booléen,  
     *valeur par défaut* : `true` ;
 
 offlineColumnsDef 
 :   active ou désactive la recherche de la définition des colonnes sur le serveur.
-    Passer ce paramètre à false évite une requête au serveur lors de l'initialisation du widget, mais vous devez alors fournir la définition complète.  
+    Passer ce paramètre à `false` évite une requête au serveur lors de 
+    l'initialisation du widget, mais vous devez alors fournir la définition complète.  
     *type* :booléen,  
     *valeur par défaut* : `false` ;
 
 autoload
 :   active ou désactive le chargement de la table lors de l'initialisation.
-    Lorsque ce paramètre est à false, la table est chargée sans requête server et sans données.
+    Lorsque ce paramètre est à `false`, la table est chargée sans requête serveur et sans données.
     l'IHM indique alors "aucune données" et "résultats 0 sur 0".
-    À charge du progammeur de customizer l'IHM.  
+    À charge du programmeur de personnaliser l'IHM.  
     *type* :booléen,  
     *valeur par défaut* : `true` ;
 
-gridDataSourceUrl
+gridDataSourceUrl 
 :   url de l'api REST de récupération des données alimentant la base  
     *type* : chaîne de caractères,  
     *valeur par défaut* : `"api/v1/documentGrid/html5/"` ;
 
-columnsDefUrl
-:   url de récupération de la définition des colonnes de la tables, inutile si offlineColumnsDef est à `false`  
+columnsDefUrl <span class="flag review">Pourquoi retrouve t'on ici des URL sur cette application qui n'est pas requise</span> 
+:   url de récupération de la définition des colonnes de la tables, inutile si 
+    `offlineColumnsDef` est à `false`  
     *type* : chaîne de caractères,  
     valeur par défaut : `"?app=DOCUMENT_GRID_UI&action=GETCOLUMNSDEFINITION"` ;
 
-filterEnumContentUrl
+filterEnumContentUrl <span class="flag review">Il serait cohérent de mettre ses données accessibles aussi depuis l'api REST</span> 
 :   url de récupération des listes déroulantes pour les énumérés  
     *type* : chaîne de caractères,  
     valeur par défaut : `"?app=DOCUMENT_GRID_UI&action=GETENUMCONTENT"` ;
@@ -155,14 +163,16 @@ filterStateContentUrl
     valeur par défaut : `"?app=DOCUMENT_GRID_UI&action=GETSTATES"` ;
 
 criterias
-:   tableau de configuration de critères s'appliquant à la table. Le format des critères est décrit dans le [chapitre sur les critères][criteres].
+:   tableau de configuration de critères s'appliquant à la table. Le format des 
+    critères est décrit dans le [chapitre sur les critères][criteres].
 
 Pour mettre à jour une option après l'initialisation, on utilise la syntaxe suivante :
 
     [javascript]
     $("#mydocGrid").docGrid("option", "<option_name>", "<value>");
 
-*note* : seules les options *collection* et *criterias* peuvent changées une fois la grille initialisée.
+*note* : seules les options *collection* et *criterias* peuvent changer une fois
+ la grille initialisée.
 
 #### columnsDef {#document-grid-ref:e1408dca-0c10-4c33-bb1c-8aeab1f69ef1}
 
@@ -170,7 +180,7 @@ Cet objet de configuration donne les éléments permettant d'établir la
 configuration des colonnes de la dataTable. Pour ce faire, il possède les
 propriétés `defaultFam` et `columns`.
 
-defaultFam
+defaultFam <span class="flag review">C'est pas en gras : c'est voulu ?</span>
 :   nom logique de la famille par défaut des attributs des colonnes  
     *type* : chaîne de caractères
 
@@ -187,7 +197,7 @@ defaultFam
         *type* : chaîne de caractères
     
     famId
-    :   famille contenant l'attribut id  
+    :   famille contenant l'attribut "id"  
         *type* : chaîne de caractères.  
         Cet élément n'est pas obligatoire dans les cas suivants :
         
@@ -197,36 +207,43 @@ defaultFam
     
     sortable
     :   indique si la colonne est triable.  
-        Cette valeur est calculée automatiquement si l'élément en cours est une propriété ou un attribut, sinon sa valeur par défaut est false  
+        Cette valeur est calculée automatiquement si l'élément en cours est une 
+        propriété ou un attribut, sinon sa valeur par défaut est `false`  
         *type* : booléen
     
     filterable
     :   indique si la colonne est filtrable  
-        Cette valeur est calculée automatiquement si l'élément en cours est une propriété ou un attribut, sinon sa valeur par défaut est false  
+        Cette valeur est calculée automatiquement si l'élément en cours est une
+         propriété ou un attribut, sinon sa valeur par défaut est `false`  
         *type* : booléen
     
     type
     :   indique le type de la colonne.  
-        Il est utilisé pour définir le type de rendu de la colonne ou pour définir des colonnes virtuelles.
+        Il est utilisé pour définir le type de rendu de la colonne ou pour 
+        définir des colonnes virtuelles.
         Dans ce cas, il faut utiliser le type `"void"`  
-        Cette valeur est calculée automatiquement si l'élément en cours est une propriété ou un attribut, sinon sa valeur est obligatoire.  
+        Cette valeur est calculée automatiquement si l'élément en cours est une 
+        propriété ou un attribut, sinon sa valeur est obligatoire.  
         *type* : chaîne de caractères.  
-        Les types *virtuels* pré-définis sont :
+        Les types *virtuels* prédéfinis sont :
         
         openTitle
         :   ajoute une colonne permettant d'ouvrir le document en cours avec le titre du document comme lien,
         
         openDoc
         :   ajoute une colonne avec un bouton pour ouvrir le document.
-            Ouvre le document dans un overlay si *withOverlay* est à true
+            Ouvre le document dans un overlay si *withOverlay* est à `true`
     
     render
     :   Permet de surcharger le rendu spécifique d'une colonne.  
-        Un render par défaut est fourni sur l'ensemble des colonnes de type attribut/propriété.
-        Il est appelé avec la string "text", et permet d'avoir un rendu textuel de la colonne.  
-        Sinon render doit être une fonction qui retourne une chaine de caractère qui sera parsée en DOM
-        et intégrée dans la cellule en cours de la table.
-        Elle reçoit en entrée la ligne en cours et a pour scope l'objet de configuration de la colonne en cours
+        Un render par défaut est fourni sur l'ensemble des colonnes de type 
+        attribut/propriété.
+        Il est appelé avec la string "text", et permet d'avoir un rendu textuel 
+        de la colonne.  
+        Sinon render doit être une fonction qui retourne un fragment HTML qui 
+        sera intégrée dans la cellule en cours de la table.
+        Elle reçoit en entrée la ligne en cours et a pour scope l'objet de 
+        configuration de la colonne en cours  
         *type* : fonction ou string
     
     withIcon
@@ -256,8 +273,11 @@ defaultFam
 Lors de la définition d'une colonne doivent être présent a minima soit l'id,
 soit le type.
 
+
+<span class="flag review">Quelques exemples de paramétrage auraient été les bienvenus</span> 
+
 **Note** : Vous pouvez utiliser [d'autres options][jquery-datatables-columns-options] 
-propres aux colonnes de la datatable mais dans ce cas le fonctionnement n'est pas
+propres aux colonnes de la `datatable` mais dans ce cas le fonctionnement n'est pas
 garanti et il appartient au développeur de faire les ajustements nécessaires.
 
 ## Méthodes associées {#document-grid-ref:d1c034a3-eb0b-4cc4-89b1-7892642b1428}
@@ -271,16 +291,17 @@ destroy
     La table est alors supprimée (la balise reste en place, mais son contenu est vidé),
 
 refresh
-:   Permet de rafraîchir la table.
-    Celle-ci conserve son état courant (page en cours, tri, filtre), mais recharge ses données en effectuant une requête serveur.
+:   Permet d'actualiser la table.
+    Celle-ci conserve son état courant (page en cours, tri, filtre), 
+    mais recharge ses données en effectuant une requête serveur.
 
 getFilters
 :   Permet de récupérer les filtres actuellement en cours sur la grille, sous la
     forme d'un tableau d'objets JavaScript.
 
 setFilters
-:   Permet de définir les filtres actuellement en cours sur la grille. Cette 
-    fonction prend comme argument un array contenant des objets de la forme 
+:   Permet de définir les nouveaux filtres à appliquer sur la grille. Cette 
+    fonction prend comme argument un `array` contenant des objets de la forme 
     suivantes :
     
     * **id** : identifiant du filtre (attrid de l'attribut correspondant
@@ -297,24 +318,27 @@ Ces méthodes sont appelées avec la syntaxe suivante :
     [javascript]
     $("#mydocGrid").docGrid("<fonction_name>");
 
+
 ## Événement associés {#document-grid-ref:3d241ffa-9893-4f07-a0c8-7fe44659013c}
 
 error
 :   déclenché à chaque erreur détectée par la dataTable.  
-    Il fournit un objet event et un objet erreur (tableau de messages d'erreurs),
+    Il fournit un objet `event` et un objet erreur (tableau de messages d'erreurs),
 
 change
 :   déclenché à chaque rechargement de la table (filtrage, changement de page, etc).
-    Il fournit un objet event et un objet contenant les informations qui vont être transmises à la dataTable.
-    La modification de cet objet est déconseillée car elle peut avoir comme effet de bord de modifier le contenu de la table.
+    Il fournit un objet `event` et un objet contenant les informations qui vont 
+    être transmises à la dataTable.  
+    La modification de cet objet est déconseillée car elle peut avoir comme 
+    effet de bord de modifier le contenu de la table.
 
 redraw
 :   déclenché après la mise à jour de la table et son ajout dans la page web.
 
-Les évènements peuvent être écoutés de deux manières différentes :
+Les événements peuvent être écoutés de deux manières différentes :
 
-*   En utilisant les fonctionnalités pour s'attacher à un évènement de jQuery.  
-    Il faut alors préfixer l'évènement cible par le nom du widget en minuscule (dans notre cas *docgrid*)
+*   En utilisant les fonctionnalités pour s'attacher à un événement de jQuery.  
+    Il faut alors préfixer l'événement cible par le nom du widget en minuscule (dans notre cas *docgrid*)
 
     [javascript]
     $("#mydocGrid").on("docgriderror", function(e, ui) { console.log(ui);});
@@ -328,3 +352,5 @@ Les évènements peuvent être écoutés de deux manières différentes :
 [columnsDef]:                           #document-grid-ref:e1408dca-0c10-4c33-bb1c-8aeab1f69ef1
 [jquery-datatables-options]:            http://www.datatables.net/usage/options
 [jquery-datatables-columns-options]:    http://datatables.net/usage/columns
+[bootstrap-container]:                  http://getbootstrap.com/css/#overview-container "Classe bootstrap"
+[jquery-datatables]: http://www.datatables.net/ "Site Jquery Datatable"
